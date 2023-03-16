@@ -1,8 +1,11 @@
 package com.example.springboot2.controller;
 
+import com.example.springboot2.model.Company;
 import com.example.springboot2.model.Employee;
+import com.example.springboot2.repository.CompanyRepository;
 import com.example.springboot2.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,9 +15,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/employee")
 public class EmployeeController {
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     @RequestMapping(value = "/list")
     public String getAllEmployee(Model model) {
@@ -29,13 +36,6 @@ public class EmployeeController {
         Employee employee = employeeRepository.getById(id);
         model.addAttribute("employee", employee);
         return "employeeDetail";
-    }
-
-    @RequestMapping(value = "/add")
-    public String addEmployee (Model model) {
-        Employee employee = new Employee();
-        model.addAttribute("employee", employee);
-        return "employeeAdd";
     }
 
     @RequestMapping (value = "/update/{id}")
@@ -68,5 +68,35 @@ public class EmployeeController {
         Employee employee = employeeRepository.getById(id);
         employeeRepository.delete(employee);
         return "redirect:/list";
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String addEmployee(Model model) {
+        Employee employee = new Employee();
+        List<Company> companies = companyRepository.findAll();
+        model.addAttribute("employee", employee);
+        model.addAttribute("companies", companies);
+        return "employeeAdd";
+    }
+
+    @RequestMapping(value = "/sort/asc")
+    public String sortEmployeeAsc(Model model) {
+        List<Employee> employees = employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        model.addAttribute("employees", employees);
+        return "employeeList";
+    }
+
+    @RequestMapping(value = "/sort/dsc")
+    public String sortEmployeeDesc(Model model) {
+        List<Employee> employees = employeeRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
+        model.addAttribute("employees", employees);
+        return "employeeList";
+    }
+
+    @RequestMapping("search")
+    public String searchEmployee(@RequestParam("name") String name, Model model) {
+        List<Employee> employees = employeeRepository.findByNameContaining(name);
+        model.addAttribute("employees", employees);
+        return "employeeList";
     }
 }

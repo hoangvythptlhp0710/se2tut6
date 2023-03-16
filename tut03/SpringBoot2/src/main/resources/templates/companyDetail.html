@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Employee Detail</title>
 </head>
 <body>
-$END$
+<div layout:fragment="content" class="container col-md-5 text-center mt-4">
+    <h4 th:each="employee: ${employees}">
+        <a class="text-decoration-none" th:href="'/employee/' + ${employee.id}"
+        th:if="${employee.company.getId()} == ${company.id}" th:text="${employee:name}">
+
+        </a>
+    </h4>
+    </div>
+</div>
 </body>
 </html>
+

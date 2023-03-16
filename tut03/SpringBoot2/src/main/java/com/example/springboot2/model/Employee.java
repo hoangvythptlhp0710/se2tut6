@@ -26,6 +26,9 @@ public class Employee {
 
     private String address;
 
+    @ManyToOne
+    private Company company;
+
     public Long getId() {
         return id;
     }

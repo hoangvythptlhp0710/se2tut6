@@ -15,20 +15,33 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Name
+                <a th:href="/employee/sort/asc" class="text-decoration-none">
+                    <img th:src="@{/images/up-arrow.png}"/>
+                </a>
+                <a th:href="/employee/sort/dsc" class="text-decoration-none">
+                    <img th:src="@{/images/download.png}"/>
+                </a>
+            </th>
             <th>Image</th>
             <th>Update</th>
             <th>Delete</th>
         </tr>
         </thead>
+        <div class="mt-3 col-3">
+            <form action="/employee/search">
+                <input type="text" name="name" placeholder="Search by name" class="form-control">
+                <input type="submit" value="Search" class="btn btn-primary mt-2">
+            </form>
+        </div>
         <tbody>
         <tr th:each="employee : ${employees}">
-            <td th:text="${employee.id}" />
+            <td th:text="${employee.id}"></td>
             <td>
-                <a th:text="${employee.name}"/>
+                <a th:text="${employee.name}"></a>
             </td>
             <td>
-                <a th:href="'/' + ${employee.id}" >
+                <a th:href="'/' + ${employee.id}">
                     <img th:src="${employee.image}" width="100" height="100">
                 </a>
             </td>
@@ -38,7 +51,8 @@
                 </a>
             </td>
             <td>
-                <a th:href="'/delete/' + ${employee.id}" onclick="return confirm('Do you want to delete this employee ?');" >
+                <a th:href="'/delete/' + ${employee.id}"
+                   onclick="return confirm('Do you want to delete this employee ?');">
                     <img th:src="@{/images/delete.png} "/>
                 </a>
             </td>
